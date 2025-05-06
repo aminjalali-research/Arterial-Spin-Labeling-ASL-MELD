@@ -34,7 +34,6 @@ Before you begin, make sure you have the following installed and environment var
 - **Other**: `git`, `make`, `gcc`, etc.
 
 ---
-
 ## Install FreeSurfer
 
 ```bash
@@ -46,6 +45,7 @@ tar -zxpf freesurfer-linux-centos7_x86_64-7.2.0.tar.gz (Wait till finishes)
 # 1.1 Find the correct location where installed:
 cd freesurfer
 pwd (It shows: /home/usr/freesurfer)
+
 # 2. Set environment variables (type the following command in the terminal)
 export FREESURFER_HOME=$HOME/freesurfer
 source $FREESURFER_HOME/SetUpFreeSurfer.sh
@@ -53,3 +53,56 @@ source $FREESURFER_HOME/SetUpFreeSurfer.sh
 # 3. Verify installation
 which freeview
 # → /home/usr/freesurfer/bin/freeview
+---
+
+## Install FSL
+
+```bash
+# 1. Download installer
+wget https://fsl.fmrib.ox.ac.uk/fsldownloads/fslinstaller.py
+
+# 2. Run installer
+python3 fslinstaller.py
+
+# 3. Add to your shell startup (e.g., ~/.bashrc)
+export FSLDIR=/usr/local/fsl
+. ${FSLDIR}/etc/fslconf/fsl.sh
+
+# 4. Verify installation
+which fsl
+---
+
+## Install Connectome Workbench
+```bash
+# 1. Download and unpack
+tar -zxpf wb_view_linux.tar.gz -C $HOME
+
+# 2. Set environment variables
+export CARET7DIR=$HOME/workbench/bin
+export PATH=$CARET7DIR:$PATH
+
+# 3. Verify installation
+which wb_command
+
+
+## Install HCP Pipelines
+```bash
+# 1. Clone the HCP pipelines repository
+git clone https://github.com/Washington-University/HCPpipelines.git $HOME/HCPpipelines
+
+# 2. Set environment variable
+export HCPPIPEDIR=$HOME/HCPpipelines
+
+
+Create Conda Environment & Install HCP-ASL
+'''bash
+# 1. Create and activate a new Conda environment
+conda create -n hcpasl python=3.11 -y
+conda activate hcpasl
+
+# 2. Install the HCP-ASL package from GitHub
+pip install git+https://github.com/physimals/hcp-asl.git
+
+
+
+
