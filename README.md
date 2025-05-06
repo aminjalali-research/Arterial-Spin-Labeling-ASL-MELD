@@ -2,22 +2,24 @@
 
 This repository provides the HCP-ASL processing pipeline for Arterial Spin Labeling (ASL) data within the HCP framework.
 
-Please refer to the original pipeline repository as in: https://github.com/physimals/hcp-asl
-
+> **Note:** This is a fork of the original pipeline:  
+> https://github.com/physimals/hcp-asl
 ---
 ## Table of Contents
 
 1. [Prerequisites](#prerequisites)  
-2. [Install FreeSurfer](#install-freesurfer)  
-3. [Install FSL](#install-fsl)  
-4. [Install Connectome Workbench](#install-connectome-workbench)  
-5. [Install HCP Pipelines](#install-hcp-pipelines)  
-6. [Create Conda Environment & Install HCP-ASL](#create-conda-environment--install-hcp-asl)  
-7. [Verify Installation](#verify-installation)  
-8. [Basic Usage Example](#basic-usage-example)  
-9. [Running Partial Pipeline Stages](#running-partial-pipeline-stages)  
+2. [Installation](#installation)  
+   - [FreeSurfer](#install-freesurfer)  
+   - [FSL](#install-fsl)  
+   - [Connectome Workbench](#install-connectome-workbench)  
+   - [HCP Pipelines](#install-hcp-pipelines)  
+   - [Conda Environment & HCP-ASL](#create-conda-environment--install-hcp-asl)  
+3. [Verify Installation](#verify-installation)  
+4. [Basic Usage](#basic-usage-example)  
+5. [Running Partial Pipeline Stages](#running-partial-pipeline-stages)  
 
 ---
+
 ## Prerequisites
 
 Before you begin, make sure you have the following installed and environment variables set:
@@ -34,7 +36,7 @@ Before you begin, make sure you have the following installed and environment var
 - **Other**: `git`, `make`, `gcc`, etc.
 
 ---
-## Install FreeSurfer
+### Install FreeSurfer
 
 ```bash
 # 1. Unpack the tarball
@@ -42,34 +44,37 @@ cd $HOME
 pwd (It shows: /home/usr)
 tar -zxpf freesurfer-linux-centos7_x86_64-7.2.0.tar.gz (Wait till finishes)
 
-# 1.1 Find the correct location where installed:
-cd freesurfer
-pwd (It shows: /home/usr/freesurfer)
+# 2. Check the installation path
+cd $HOME/freesurfer
+pwd  # Should output: /home/your-username/freesurfer  (It shows: /home/usr/freesurfer)
 
-# 2. Set environment variables (type the following command in the terminal)
+# 3. Set environment variables (type the following command in the terminal)
 export FREESURFER_HOME=$HOME/freesurfer
 source $FREESURFER_HOME/SetUpFreeSurfer.sh
 
-# 3. Verify installation
+# 4. Verify the installation
 which freeview
-# → /home/usr/freesurfer/bin/freeview
+# Expected output: /home/your-username/freesurfer/bin/freeview
 ---
 
-## Install FSL
+### Install FSL
 
 ```bash
-# 1. Download installer
+# 1. Download the FSL installer
 wget https://fsl.fmrib.ox.ac.uk/fsldownloads/fslinstaller.py
 
-# 2. Run installer
+# 2. Run the installer
 python3 fslinstaller.py
 
-# 3. Add to your shell startup (e.g., ~/.bashrc)
+# 3. Add FSL to your shell startup script (e.g., ~/.bashrc or ~/.zshrc)
 export FSLDIR=/usr/local/fsl
 . ${FSLDIR}/etc/fslconf/fsl.sh
 
-# 4. Verify installation
+# 4. Verify the installation
 which fsl
+# Expected output: /usr/local/fsl/bin/fsl
+
+
 ---
 
 ## Install Connectome Workbench
@@ -94,7 +99,7 @@ git clone https://github.com/Washington-University/HCPpipelines.git $HOME/HCPpip
 export HCPPIPEDIR=$HOME/HCPpipelines
 
 
-Create Conda Environment & Install HCP-ASL
+## Create Conda Environment & Install HCP-ASL
 '''bash
 # 1. Create and activate a new Conda environment
 conda create -n hcpasl python=3.11 -y
@@ -102,6 +107,37 @@ conda activate hcpasl
 
 # 2. Install the HCP-ASL package from GitHub
 pip install git+https://github.com/physimals/hcp-asl.git
+
+
+## Verify Installation
+'''bash
+# This should print usage information without errors
+process_hcp_asl --help
+
+##Basic Usage Example
+'''bash
+process_hcp_asl \
+  --subid 100307 \
+  --subdir /path/to/HCP/100307_V1_MR \
+  --mbpcasl /path/to/mbPCASLhr_PA.nii.gz \
+  --fmap_ap /path/to/PCASLhr_SpinEchoFieldMap_AP.nii.gz \
+  --fmap_pa /path/to/PCASLhr_SpinEchoFieldMap_PA.nii.gz \
+  --grads /path/to/coeff_AS82_Prisma.grad
+Outputs will be placed in:
+/path/to/HCP/100307_V1_MR/T1w/ASL
+
+
+## Running Partial Pipeline Stages
+To run only stages 0–8 (for example, if you have an external quantifier):
+```bash
+process_hcp_asl \
+  --subid 100307 \
+  --subdir /path/to/HCP/100307_V1_MR \
+  --grads /path/to/coeff.grad \
+  --mbpcasl /path/to/mbPCASL.nii.gz \
+  --fmap_ap /path/to/fmap_AP.nii.gz \
+  --fmap_pa /path/to/fmap_PA.nii.gz \
+  --stages 0 1 2 3 4 5 6 7 8
 
 
 
