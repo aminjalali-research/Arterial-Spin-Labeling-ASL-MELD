@@ -18,3 +18,19 @@ Please refer to the original pipeline repository as in: https://github.com/physi
 9. [Running Partial Pipeline Stages](#running-partial-pipeline-stages)  
 
 ---
+## Prerequisites
+
+Before you begin, make sure you have the following installed and environment variables set:
+
+- **FreeSurfer (v7.2.0)**  
+  Download and install following the [Linux CentOS 7 instructions](https://surfer.nmr.mgh.harvard.edu/fswiki/FS7_linux).  
+- **FSL (≥ 6.0.5.1)**  
+  Download and install from the [FSL website](https://fsl.fmrib.ox.ac.uk/fsl/fslwiki/FslInstallation).  
+- **Connectome Workbench (≥ v1.5.0)**  
+  Download from the [Human Connectome Project](https://humanconnectome.org/software/workbench).  
+- **HCP Pipelines**  
+  You will clone this below.  
+- **Python ≥ 3.9** (we recommend using Conda)  
+- **Other**: `git`, `make`, `gcc`, etc.
+
+---
