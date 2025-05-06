@@ -18,8 +18,6 @@ This repository provides the HCP-ASL processing pipeline for Arterial Spin Label
 4. [Basic Usage](#basic-usage-example)  
 5. [Running Partial Pipeline Stages](#running-partial-pipeline-stages)  
 
----
-
 ## Prerequisites
 
 Before you begin, make sure you have the following installed and environment variables set:
@@ -36,17 +34,17 @@ Before you begin, make sure you have the following installed and environment var
 - **Other**: `git`, `make`, `gcc`, etc.
 
 ---
-### Install FreeSurfer
 
+## Installation 
+### Install FreeSurfer
 ```bash
-# 1. Unpack the tarball
+# 1. Download and extract the FreeSurfer tarball
 cd $HOME
-pwd (It shows: /home/usr)
 tar -zxpf freesurfer-linux-centos7_x86_64-7.2.0.tar.gz (Wait till finishes)
 
-# 2. Check the installation path
+# 2. Move into the extracted directory
 cd $HOME/freesurfer
-pwd  # Should output: /home/your-username/freesurfer  (It shows: /home/usr/freesurfer)
+pwd  # Should return: /home/usr/freesurfer)
 
 # 3. Set environment variables (type the following command in the terminal)
 export FREESURFER_HOME=$HOME/freesurfer
@@ -54,7 +52,8 @@ source $FREESURFER_HOME/SetUpFreeSurfer.sh
 
 # 4. Verify the installation
 which freeview
-# Expected output: /home/your-username/freesurfer/bin/freeview
+# Expected output: /home/usr/freesurfer/bin/freeview
+
 ---
 
 ### Install FSL
