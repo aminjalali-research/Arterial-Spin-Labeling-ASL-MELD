@@ -34,3 +34,22 @@ Before you begin, make sure you have the following installed and environment var
 - **Other**: `git`, `make`, `gcc`, etc.
 
 ---
+
+## Install FreeSurfer
+
+```bash
+# 1. Unpack the tarball
+cd $HOME
+pwd (It shows: /home/usr)
+tar -zxpf freesurfer-linux-centos7_x86_64-7.2.0.tar.gz (Wait till finishes)
+
+# 1.1 Find the correct location where installed:
+cd freesurfer
+pwd (It shows: /home/usr/freesurfer)
+# 2. Set environment variables (type the following command in the terminal)
+export FREESURFER_HOME=$HOME/freesurfer
+source $FREESURFER_HOME/SetUpFreeSurfer.sh
+
+# 3. Verify installation
+which freeview
+# → /home/usr/freesurfer/bin/freeview
