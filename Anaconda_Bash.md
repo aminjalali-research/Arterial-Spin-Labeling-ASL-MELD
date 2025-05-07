@@ -54,6 +54,20 @@ Example:
 source ~/.bashrc
 ```
 
+## What is ~ when addressing to directories?
+~ (tilde) shows the relative shortcut, pointing out to your home directory (/home/usr). 
+Therefore (/home/usr/Music) is equivalent to (~/Music).
+
+To edit use the following methods:
+```bash
+nano ~/.bashrc
+vim ~/.bashrc
+gedit ~/.bashrc
+
+After editing, reload the file by:
+source ~/.bashrc
+```
+
 ## Summary
 
 - **Bash scripts** (`.sh`) automate command-line tasks.
