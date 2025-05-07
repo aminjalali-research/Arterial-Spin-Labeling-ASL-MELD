@@ -6,38 +6,44 @@ This repository provides the HCP-ASL processing pipeline for Arterial Spin Label
 > https://github.com/physimals/hcp-asl
 
 
+---
+
 ## Table of Contents
 
 1. [Prerequisites](#prerequisites)  
 2. [Installation](#installation)  
+   - [Detailed Anaconda/Bash Instructions](./Anaconda_Bash.md)
+3. [Software](#software)  
    - [FreeSurfer](#install-freesurfer)  
    - [FSL](#install-fsl)  
    - [Connectome Workbench](#install-connectome-workbench)  
    - [HCP Pipelines](#install-hcp-pipelines)  
    - [Conda Environment & HCP-ASL](#create-conda-environment--install-hcp-asl)  
-3. [Verify Installation](#verify-installation)
-4. [Prepare Your Data](#prepare-your-data) 
-5. [Basic Usage](#basic-usage-example)  
-6. [Running Partial Pipeline Stages](#running-partial-pipeline-stages)  
+4. [Verify Installation](#verify-installation)  
+5. [Prepare Your Data](#prepare-your-data)  
+6. [Run the Pipeline](#run-the-pipeline)  
+7. [Running Partial Pipeline Stages](#running-partial-pipeline-stages)
+
+---
+
 
 
 ## Prerequisites
 
 Before you begin, make sure you have the following software packages installed and their environment variables are set:
 
-- **FreeSurfer (v7.2.0)**  
-  Download and install following the [Linux CentOS 7 instructions](https://surfer.nmr.mgh.harvard.edu/fswiki/FS7_linux).  
-- **FSL (≥ 6.0.5.1)**  
-  Download and install from the [FSL website](https://fsl.fmrib.ox.ac.uk/fsl/fslwiki/FslInstallation).  
-- **Connectome Workbench (≥ v1.5.0)**  
-  Download from the [Human Connectome Project](https://humanconnectome.org/software/workbench).  
-- **HCP Pipelines**  
-  You will clone this below.  
-- **Python ≥ 3.9** (we recommend using Conda)  
-- **Other**: `git`, `make`, `gcc`, etc.
+- **FreeSurfer (v7.2.0)** ([Installation Guide](https://surfer.nmr.mgh.harvard.edu/fswiki/FS7_linux))
+- **FSL (≥ 6.0.5.1)** ([Installation Guide](https://fsl.fmrib.ox.ac.uk/fsl/fslwiki/FslInstallation))
+- **Connectome Workbench (≥ v1.5.0)** ([Download](https://humanconnectome.org/software/workbench))
+- **HCP Pipelines** (instructions below)
+- **Python ≥ 3.9** (via Conda recommended)
+- **Others**: `git`, `make`, `gcc`, etc.
 
+---
 
 ## Installation 
+See the [Detailed Anaconda and Bash environment setup](./Anaconda_Bash.md).
+
 ~ (tilde) shows the relative shortcut, pointing out to your home directory (/home/usr). 
 Therefore (/home/usr/Music) is equivalent to (~/Music).
 
