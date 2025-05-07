@@ -44,20 +44,6 @@ Before you begin, make sure you have the following software packages installed a
 ## Installation 
 See the [Detailed Anaconda and Bash environment setup](./Anaconda_Bash.md).
 
-~ (tilde) shows the relative shortcut, pointing out to your home directory (/home/usr). 
-Therefore (/home/usr/Music) is equivalent to (~/Music).
-
-To edit use the following methods:
-```bash
-nano ~/.bashrc
-vim ~/.bashrc
-gedit ~/.bashrc
-
-After editing, reload the file by:
-source ~/.bashrc
-```
-
-
 ## Install FreeSurfer
 ```bash
 1. Download and extract the FreeSurfer tarball
