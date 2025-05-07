@@ -18,10 +18,7 @@ Example of a simple bash script:
 
 echo "Hello, World!"
 ```
-"""
 
-# Cell 3: Markdown (What are Environment Variables and bashrc?)
-"""
 ## Why Do We Set Variables in `.bashrc`?
 
 Environment variables store information used by the operating system and other software programs. Setting these variables in `.bashrc` makes sure they are available every time you open a new terminal session.
@@ -36,11 +33,6 @@ Example:
 ```bash
 export MY_VARIABLE="my_value"
 ```
-"""
-
-# Cell 4: Markdown (What is `export`?)
-"""
-## What is `export`?
 
 The `export` command makes a variable available to all programs running in the current shell session or scripts launched from it.
 
@@ -51,10 +43,7 @@ export PATH="/my/custom/path:$PATH"
 ```
 
 This adds `/my/custom/path` to your current system path.
-"""
 
-# Cell 5: Markdown (What is `source ~/.bashrc`?)
-"""
 ## What Does `source ~/.bashrc` Do?
 
 The command `source ~/.bashrc` reloads your `.bashrc` file in the current terminal session. This is useful after making changes to `.bashrc`, so you don't need to restart the terminal to apply changes.
@@ -64,10 +53,7 @@ Example:
 ```bash
 source ~/.bashrc
 ```
-"""
 
-# Cell 6: Markdown (Summary)
-"""
 ## Summary
 
 - **Bash scripts** (`.sh`) automate command-line tasks.
