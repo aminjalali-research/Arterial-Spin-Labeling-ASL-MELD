@@ -144,7 +144,7 @@ Replace SubjectID with your actual subject identifier. Ensure that:
     └── coeff_AS82_Prisma.grad
 ```
 
-## Run the Pipeline, Basic Usage Example
+## Run the Pipeline
 With your environment set up and data organized, run the pipeline using the process_hcp_asl command:
 ```bash
 process_hcp_asl \
@@ -157,20 +157,6 @@ process_hcp_asl \
 Outputs will be placed in:
 /path/to/HCP/100307_V1_MR/T1w/ASL
 ```
-## Running Partial Pipeline Stages
-To run only stages 0–8 (for example, if you have an external quantifier):
-```bash
-process_hcp_asl \
-  --subid 100307 \
-  --subdir /path/to/HCP/100307_V1_MR \
-  --grads /path/to/coeff.grad \
-  --mbpcasl /path/to/mbPCASL.nii.gz \
-  --fmap_ap /path/to/fmap_AP.nii.gz \
-  --fmap_pa /path/to/fmap_PA.nii.gz \
-  --stages 0 1 2 3 4 5 6 7 8
-```
-
-
 
 
 
