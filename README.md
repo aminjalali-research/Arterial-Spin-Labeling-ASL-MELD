@@ -63,14 +63,14 @@ $ cd $HOME/freesurfer
 $ pwd  # Should return: /home/usr/freesurfer)
 
 3. Set environment variables (type the following command in the terminal)
-$ export FREESURFER_HOME=$HOME/freesurfer
-$ source $FREESURFER_HOME/SetUpFreeSurfer.sh
+$ export FREESURFER_DIR=/home/usr/software/freesurfer
+$ source $FREESURFER_DIR/SetUpFreeSurfer.sh
 
 4. Verify the installation
 $ which freeview (Expected output: /home/usr/freesurfer/bin/freeview)
 ```
 
-## Install FSL
+## Install FSL (NeuroImaging)
 ```bash
 # 1. Download the FSL installer
 wget https://fsl.fmrib.ox.ac.uk/fsldownloads/fslinstaller.py
@@ -78,16 +78,20 @@ wget https://fsl.fmrib.ox.ac.uk/fsldownloads/fslinstaller.py
 # 2. Run the installer
 python3 fslinstaller.py
 
-# 3. Add FSL to your shell startup script (e.g., ~/.bashrc or ~/.zshrc)
-export FSLDIR=/usr/local/fsl
+# 3. Add FSL to your shell startup script, enabling command-line usage:
+export FSL_DIR=/home/usr/software/fsl/
+export PATH=${FSLDIR}/bin:${PATH}
 . ${FSLDIR}/etc/fslconf/fsl.sh
+
+export FSLCONFDIR=/home/usr/Software/fsl/config
+export FSLDEVDIR=/home/usr/Software/fsl/build
 
 # 4. Verify the installation
 which fsl
 # Expected output: /usr/local/fsl/bin/fsl
 ```
 
-## Install Connectome Workbench
+## Install Connectome Workbench (NeuroImaging Tool)
 ```bash
 # 1. Download and unpack
 tar -zxpf wb_view_linux.tar.gz -C $HOME
