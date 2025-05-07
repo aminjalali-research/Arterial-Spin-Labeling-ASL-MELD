@@ -15,14 +15,15 @@ This repository provides the HCP-ASL processing pipeline for Arterial Spin Label
    - [Connectome Workbench](#install-connectome-workbench)  
    - [HCP Pipelines](#install-hcp-pipelines)  
    - [Conda Environment & HCP-ASL](#create-conda-environment--install-hcp-asl)  
-3. [Verify Installation](#verify-installation)  
-4. [Basic Usage](#basic-usage-example)  
-5. [Running Partial Pipeline Stages](#running-partial-pipeline-stages)  
+3. [Verify Installation](#verify-installation)
+4. [Prepare Your Data](#prepare-your-data) 
+5. [Basic Usage](#basic-usage-example)  
+6. [Running Partial Pipeline Stages](#running-partial-pipeline-stages)  
 
 
 ## Prerequisites
 
-Before you begin, make sure you have the following installed and environment variables set:
+Before you begin, make sure you have the following software packages installed and their environment variables are set:
 
 - **FreeSurfer (v7.2.0)**  
   Download and install following the [Linux CentOS 7 instructions](https://surfer.nmr.mgh.harvard.edu/fswiki/FS7_linux).  
@@ -37,6 +38,20 @@ Before you begin, make sure you have the following installed and environment var
 
 
 ## Installation 
+~ (tilde) shows the relative shortcut, pointing out to your home directory (/home/usr). 
+Therefore (/home/usr/Music) is equivalent to (~/Music).
+
+To edit use the following methods:
+```bash
+nano ~/.bashrc
+vim ~/.bashrc
+gedit ~/.bashrc
+
+After editing, reload the file by:
+source ~/.bashrc
+```
+
+
 ## Install FreeSurfer
 ```bash
 1. Download and extract the FreeSurfer tarball
@@ -93,9 +108,10 @@ git clone https://github.com/Washington-University/HCPpipelines.git $HOME/HCPpip
 export HCPPIPEDIR=$HOME/HCPpipelines
 ```
 ## Create Conda Environment & Install HCP-ASL
+Download and install Anaconda through their official website: 
 ```bash
 # 1. Create and activate a new Conda environment
-conda create -n hcpasl python=3.11 -y
+conda create -n hcpasl python=3.11 
 conda activate hcpasl
 
 # 2. Install the HCP-ASL package from GitHub
@@ -108,7 +124,24 @@ pip install git+https://github.com/physimals/hcp-asl.git
 process_hcp_asl --help
 ```
 
-## Basic Usage Example
+## Prepare your Data
+Replace SubjectID with your actual subject identifier. Ensure that:
+
+- mbPCASLhr_PA.nii.gz is your multi-band PCASL image.
+- PCASLhr_SpinEchoFieldMap_AP.nii.gz and PCASLhr_SpinEchoFieldMap_PA.nii.gz are your spin-echo field maps with anterior-posterior and posterior-anterior phase encoding, respectively.
+- coeff_AS82_Prisma.grad is your gradient coefficient file.
+```bash
+/path/to/study_dir/
+├── SubjectID/
+    ├── T1w/
+    ├── mbPCASLhr_PA.nii.gz
+    ├── PCASLhr_SpinEchoFieldMap_AP.nii.gz
+    ├── PCASLhr_SpinEchoFieldMap_PA.nii.gz
+    └── coeff_AS82_Prisma.grad
+```
+
+## Run the Pipeline, Basic Usage Example
+With your environment set up and data organized, run the pipeline using the process_hcp_asl command:
 ```bash
 process_hcp_asl \
   --subid 100307 \
