@@ -152,7 +152,34 @@ Outputs will be placed in:
 
 
 
+—-------------------------------------------------
+# ASL and MELD
 
+ASL-BIDS, the brain imaging data structure extension for arterial spin labeling
+Basil, convert the MRI and install FSL and play around to visualize the MRIs
+
+
+In the process: 
+https://torchio.readthedocs.io/auto_examples/index.html
+https://github.com/Project-MONAI/MONAI
+ClinicaDL: An open-source deep learning software for reproducible neuroimaging processing
+
+https://hengloose.medium.com/a-comprehensive-starter-guide-to-visualizing-and-analyzing-dicom-images-in-python-7a8430fcb7ed
+https://carpentries-incubator.github.io/SDC-BIDS-IntroMRI/aio.html
+
+Multi-Scale Deep Learning of Clinically Acquired Multi-Modal MRI Improves the Localization of Seizure Onset Zone in Children With Drug-Resistant Epilepsy
+
+Automated computed tomography and magnetic resonance imaging segmentation using deep learning: a beginner’s guide
+
+Annotation of epilepsy clinic letters for natural language processing
+
+https://github.com/greydongilmore/clinical_dicom2bids_smk
+
+Higher Validity, Lower Radiation: A New Ictal Single-Photon Emission Computed Tomography Framework
+
+Cerebral metabolism and perfusion in MR-negative individuals with refractory focal epilepsy assessed by simultaneous acquisition of 18F-FDG PET and arterial spin labeling
+
+HSANET: A HYBRID SELF-CROSS ATTENTION NETWORK FOR REMOTE SENSING CHANGE DETECTION
 
 
 
