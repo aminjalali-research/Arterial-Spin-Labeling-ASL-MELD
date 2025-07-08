@@ -1,8 +1,10 @@
 # Left–Right Lobe Asymmetry Analysis in ASL Perfusion MRI
 
+Overview: Brain perfusion asymmetry (left vs. right hemisphere or lobes) can be assessed at different scales. Below we compare voxel-based, ROI-based, and surface-based methods for analyzing asymmetry in arterial spin labeling (ASL) perfusion MRI. For each, we explain how asymmetries are quantified, provide any relevant formula with asymmetry indices (AI) with attention to sensitivity, spatial resolution, and robustness. 
+
 Pipeline: Preprocess (denoising, bias correction, skull-strip), segmentation, registration, run FreeSurfer, then calculate RIO volumetry.  
 
-Asymmetry index (AI) / laterality index (LI): 
+
 
 1. Region-of-Interest (ROI) volumetry: Segment each anatomical lobe or nucleus, add up all voxels on each side, and compare the two scalars.
 
