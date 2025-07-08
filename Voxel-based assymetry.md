@@ -1,4 +1,6 @@
-# Quantify left vs. right differences on brain MRI
+# Left–Right Lobe Asymmetry Analysis in ASL Perfusion MRI
+
+Pipeline: Preprocess (denoising, bias correction, skull-strip), segmentation, registration, run FreeSurfer, then calculate RIO volumetry.  
 
 Asymmetry index (AI) / laterality index (LI): 
 
