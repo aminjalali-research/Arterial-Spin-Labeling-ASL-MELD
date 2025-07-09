@@ -75,8 +75,134 @@ LRIA = 100 * (I_L - I_R) / ((I_L + I_R) / 2)
 8. Functional MRI Laterality Index
 - LI = (LH − RH)/(LH + RH); many variants exist (e.g., Dice/Jaccard-based)
 
+-------------------
+| Method        | Asymmetry Measure<br/>[Source] | Spatial Scale | Sensitivity<br/>(to subtle differences) | Robustness<br/>(noise, artifacts) | Notable Strengths | Key Limitations |
+|---------------|---------------------------------------------------------------------|--------------|--------------------------------------|-----------------------------------|-------------------|----------------|
+| **Voxel-based**   | Voxel-wise AI map (e.g. `$(L-R)/((L+R)/2)$)`<br/>[dbm.neuro.uni-jena.de](https://dbm.neuro.uni-jena.de) | High (millimeter voxels)<br/>[dbm.neuro.uni-jena.de](https://dbm.neuro.uni-jena.de) | High: detects small focal asymmetries (e.g. tiny cortical or subcortical perfusion deficits)<br/>[dbm.neuro.uni-jena.de](https://dbm.neuro.uni-jena.de) | Lower: sensitive to noise & misregistration; requires smoothing & careful stats<br/>[dbm.neuro.uni-jena.de](https://dbm.neuro.uni-jena.de) | – Unbiased, whole-brain search for asymmetry (no a priori ROI)<br/>– Generates detailed asymmetry maps for visualization<br/>[pubmed.ncbi.nlm.nih.gov](https://pubmed.ncbi.nlm.nih.gov)<br/>– Proven high detection of subtle lesions (e.g. improved epilepsy focus localization) | – Prone to false positives if data quality is poor (must correct for multiple comparisons)<br/>– Assumes perfect left-right alignment; anatomical differences can confound results without symmetric normalization<br/>[dbm.neuro.uni-jena.de](https://dbm.neuro.uni-jena.de)<br/>– More complex analysis pipeline |
+| **ROI-based**     | ROI laterality index or ratio (e.g. `$L/R$` or `$(L-R)/(L+R)$`)<br/>[pmc.ncbi.nlm.nih.gov](https://pmc.ncbi.nlm.nih.gov) | Moderate/Low (cm-scale regions)<br/>[dbm.neuro.uni-jena.de](https://dbm.neuro.uni-jena.de) | Moderate: will catch large or region-wide asymmetries, but may miss very localized ones<br/>[dbm.neuro.uni-jena.de](https://dbm.neuro.uni-jena.de) | High: averaging reduces noise; results are reliable and repeatable<br/>[pmc.ncbi.nlm.nih.gov](https://pmc.ncbi.nlm.nih.gov) | – Simple to compute and interpret (gives a single number per region, e.g. “80% perfusion on left vs right”)<br/>– Little preprocessing needed; robust even on single-case basis (common in clinical reports)<br/>[pmc.ncbi.nlm.nih.gov](https://pmc.ncbi.nlm.nih.gov) | – Coarse resolution: can mask intra-ROI heterogeneity (small affected area diluted by normal tissue)<br/>– Dependent on ROI definition; requires that the chosen regions correspond to functional units of asymmetry<br/>– Limited number of measurements (may overlook unexpected asymmetry outside defined ROIs) |
+| **Surface-based** | Vertex-wise asymmetry (left vs. right cortex), often on a symmetric surface template<br/>[pmc.ncbi.nlm.nih.gov](https://pmc.ncbi.nlm.nih.gov) | High along cortex (sub-millimeter on surface mesh) | High (cortex): very sensitive to cortical perfusion differences, preserving gyral pattern detail<br/>[pmc.ncbi.nlm.nih.gov](https://pmc.ncbi.nlm.nih.gov) | High (cortex): avoids cross-sulcus blurring; cortical alignment improves signal consistency<br/>[pmc.ncbi.nlm.nih.gov](https://pmc.ncbi.nlm.nih.gov) | – Respects cortical anatomy, yielding sharper and more accurate localization of asymmetry than volume methods<br/>– Can integrate with cortical metrics (e.g. map perfusion asymmetry alongside cortical thickness or function)<br/>– Shows improved detection of cortical hypoperfusion vs. voxel-based in some studies<br/>[pmc.ncbi.nlm.nih.gov](https://pmc.ncbi.nlm.nih.gov) | – Focuses on cortex: asymmetry in deep structures needs separate treatment<br/>– Requires good quality structural MRI and segmentation; errors in surface extraction can affect results<br/>– Not as widely used clinically; interpretation needs familiarity with surface maps |
 
 
+```python
+"""
+Assumptions:
+- ASL CBF map is preprocessed (coregistered, normalized, skull-stripped, same orientation for L/R)
+- Standard atlases or surfaces are available for ROI and surface-based analyses
+- Uses NiBabel, Nilearn, Numpy, Nibabel, FreeSurfer, and optionally, BrainSpace or SurfStat (for surfaces)
+- For simplicity, minimal plotting is used (for illustration)
+"""
+
+import numpy as np
+import nibabel as nib
+import matplotlib.pyplot as plt
+from nilearn import plotting, image, datasets, surface
+from nilearn.maskers import NiftiLabelsMasker
+from nilearn.surface import vol_to_surf
+
+# ----------------------
+# INPUTS
+# ----------------------
+# Path to preprocessed ASL CBF map (NIfTI)
+asl_path = 'asl_cbf_map.nii.gz'  # (replace with your path)
+# Atlas with left/right ROI labels (e.g. Harvard-Oxford, AAL)
+atlas_path = 'atlas_labels.nii.gz'  # (replace with your path)
+# List of left-right ROI pairs (by atlas index)
+left_rois = [1,3,5,7]   # Example ROI label indices (even=left, odd=right)
+right_rois = [2,4,6,8]
+
+# For surface-based: pial/white surfaces, or use fsaverage
+fsaverage = datasets.fetch_surf_fsaverage()
+
+# ----------------------
+# Load images
+# ----------------------
+cbf_img = nib.load(asl_path)
+atlas_img = nib.load(atlas_path)
+cbf_data = cbf_img.get_fdata()
+atlas_data = atlas_img.get_fdata().astype(int)
+
+# ----------------------
+# 1. ROI-BASED ASYMMETRY
+# ----------------------
+def roi_asymmetry(cbf_data, atlas_data, left_rois, right_rois):
+    ai_list = []
+    for l, r in zip(left_rois, right_rois):
+        left_mask = (atlas_data == l)
+        right_mask = (atlas_data == r)
+        left_val = np.mean(cbf_data[left_mask])
+        right_val = np.mean(cbf_data[right_mask])
+        ai = (left_val - right_val) / ((left_val + right_val) / 2)
+        ai_list.append({'left_roi': l, 'right_roi': r,
+                        'left_mean': left_val, 'right_mean': right_val,
+                        'AI': ai})
+    return ai_list
+
+roi_results = roi_asymmetry(cbf_data, atlas_data, left_rois, right_rois)
+print("\nROI-Based Asymmetry Results:")
+for res in roi_results:
+    print(res)
+
+# ----------------------
+# 2. VOXEL-BASED ASYMMETRY
+# ----------------------
+def voxel_asymmetry_map(cbf_data):
+    # Assumes data is in RAS+ orientation and midline is at data.shape[0]//2
+    x = cbf_data.shape[0]
+    left = cbf_data[:x//2, :, :]
+    right = cbf_data[x//2:, :, :]
+    # Flip right hemisphere to align to left
+    right_flipped = np.flip(right, axis=0)
+    # Truncate for equal size if odd number
+    min_shape = np.min([left.shape, right_flipped.shape], axis=0)
+    left_crop = left[:min_shape[0], :min_shape[1], :min_shape[2]]
+    right_crop = right_flipped[:min_shape[0], :min_shape[1], :min_shape[2]]
+    ai_map = (left_crop - right_crop) / ((left_crop + right_crop) / 2 + 1e-5)
+    # Merge back for visualization (left AI, right zeros)
+    full_ai = np.zeros_like(cbf_data)
+    full_ai[:min_shape[0], :min_shape[1], :min_shape[2]] = ai_map
+    return full_ai
+
+ai_map = voxel_asymmetry_map(cbf_data)
+nib.save(nib.Nifti1Image(ai_map, cbf_img.affine), 'asl_voxel_asymmetry_map.nii.gz')
+print("\nVoxel-based AI map saved as 'asl_voxel_asymmetry_map.nii.gz'.")
+
+# Visualize one slice
+plt.imshow(ai_map[:,:,ai_map.shape[2]//2], cmap='seismic', vmin=-1, vmax=1)
+plt.title('Voxel-based Asymmetry Index (Mid-slice)')
+plt.colorbar(label='AI')
+plt.show()
+
+# ----------------------
+# 3. SURFACE-BASED ASYMMETRY
+# ----------------------
+def surface_asymmetry(cbf_img, hemisphere='left'):
+    # Project CBF to surface mesh (fsaverage, pial)
+    mesh = fsaverage['pial_' + hemisphere]
+    surf_cbf = vol_to_surf(cbf_img, mesh)
+    # Project flipped hemisphere for AI
+    mesh_opposite = fsaverage['pial_right' if hemisphere=='left' else 'pial_left']
+    surf_cbf_opp = vol_to_surf(cbf_img, mesh_opposite)
+    # Flip to align left-right (reverse vertex order)
+    surf_cbf_opp_flip = surf_cbf_opp[::-1]
+    ai_surf = (surf_cbf - surf_cbf_opp_flip) / ((surf_cbf + surf_cbf_opp_flip) / 2 + 1e-5)
+    return surf_cbf, surf_cbf_opp_flip, ai_surf
+
+surf_cbf_left, surf_cbf_right_flip, ai_surf_left = surface_asymmetry(cbf_img, 'left')
+
+# Plot surface AI map
+plotting.plot_surf_stat_map(fsaverage['pial_left'], ai_surf_left, hemi='left', title='Surface Asymmetry (Left)', colorbar=True, cmap='seismic')
+plt.show()
+
+# ----------------------
+# Comparison summary
+# ----------------------
+print("\nComparison Summary:")
+print("- ROI-based: Gives one AI value per region (robust, interpretable)")
+print("- Voxel-based: AI map highlights focal asymmetries (high-res, noise sensitive)")
+print("- Surface-based: AI per vertex (high-res along cortex, anatomical specificity)")
+
+# (Optional) Save results, generate summary plots, or statistical tests as needed
+```
 
 
 
