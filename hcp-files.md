@@ -46,4 +46,9 @@ mask_file = os.path.join(asl_dir, "reg", "ASL_grid_T1w_brain_mask.nii.gz")
 out_file  = os.path.join(asl_dir, "perfusion_asym_index.nii.gz")
 compute_asymmetry_map(perf_file, mask_file, out_file)
 ```
+This will produce a new volume where each voxel’s value indicates the relative perfusion difference between the left and right mirrored locations. Positive values mean left > right, negative means right > left, and zero means symmetric. For example, an asymmetry value of +0.2 would mean the left voxel has ~20% higher CBF than the right voxel, while –0.5 would mean the right side has 50% higher perfusion than the left in that region.
+
+Log ratio: Another metric is the log-transformed ratio $\log(L/R)$, which symmetrizes the distribution and handles scaling (log ratio 0 means symmetry, positive = left > right). This could be computed as $\log((L+\epsilon)/(R+\epsilon))$ for numerical stability. It yields similar information but could be beneficial if perfusion values have a skewed distribution.
+
+
 
