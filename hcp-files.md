@@ -18,37 +18,95 @@ We can flip the array on the x dimension (index 0) to produce a mirrored volume.
 Save the asymmetry map as a NIfTI. We can name it, for example, perfusion_asym_index.nii.gz (to denote it’s the normalized asymmetry index) and save it in the subject’s T1w ASL directory alongside other outputs. Use the same affine and header as the input perfusion image when saving via nibabel, so that it aligns exactly with the T1 anatomy.
 
 ```python
-import nibabel as nib
-import numpy as np
+# Required Python Libraries:
+import nibabel as nib   # Already used in pipeline
+import numpy as np      # Already used in pipeline
+import os               # Already used in pipeline
 
-def compute_asymmetry_map(perf_path, mask_path, out_path):
+# Additional recommended library for image processing (optional):
+import nilearn.image as nli  # For advanced masking and image processing
+
+# Example function for voxel-based ASL asymmetry calculation:
+def compute_asymmetry_index(perf_path, mask_path, out_path):
+    # Load perfusion and mask images
     img = nib.load(perf_path)
     data = img.get_fdata()
-    brain_mask = nib.load(mask_path).get_fdata() if mask_path else None
-    # Flip the perfusion data along the X axis (left-right flip)
-    flipped_data = data[::-1, :, :].copy()  
-    # Calculate asymmetry index: (L - R) / ((L + R)/2)
-    num = data - flipped_data
-    den = (data + flipped_data) / 2.0
-    # Avoid divide-by-zero by masking or adding epsilon
-    asym_index = np.zeros_like(data)
-    valid = (den != 0)  # or use brain_mask > 0 for valid voxels
-    asym_index[valid] = num[valid] / den[valid]
-    # Apply brain mask to clean outside voxels
-    if brain_mask is not None:
-        asym_index *= (brain_mask > 0)
-    asym_img = nib.Nifti1Image(asym_index, img.affine, img.header)
+
+    mask_img = nib.load(mask_path)
+    mask_data = mask_img.get_fdata()
+
+    # Flip perfusion data across the X-axis (left-right)
+    flipped_data = data[::-1, :, :].copy()
+
+    # Calculate asymmetry index safely, avoiding division by zero
+    numerator = data - flipped_data
+    denominator = (data + flipped_data) / 2
+
+    asymmetry_index = np.zeros_like(data)
+    valid_voxels = (denominator != 0) & (mask_data > 0)
+    asymmetry_index[valid_voxels] = numerator[valid_voxels] / denominator[valid_voxels]
+
+    # Save the asymmetry index image
+    asym_img = nib.Nifti1Image(asymmetry_index, img.affine, img.header)
     nib.save(asym_img, out_path)
 
-# ... In the pipeline execution flow (after ROI stats) ...
+# Integrate this function into your pipeline script (run_pipeline.py):
+# (Assuming paths below are adjusted according to your pipeline structure)
 perf_file = os.path.join(asl_dir, "perfusion_calib.nii.gz")
 mask_file = os.path.join(asl_dir, "reg", "ASL_grid_T1w_brain_mask.nii.gz")
-out_file  = os.path.join(asl_dir, "perfusion_asym_index.nii.gz")
-compute_asymmetry_map(perf_file, mask_file, out_file)
+asymmetry_file = os.path.join(asl_dir, "perfusion_asym_index.nii.gz")
+
+compute_asymmetry_index(perf_file, mask_file, asymmetry_file)
+
+# Ensure Nilearn is installed if used:
+# pip install nilearn
+
 ```
 This will produce a new volume where each voxel’s value indicates the relative perfusion difference between the left and right mirrored locations. Positive values mean left > right, negative means right > left, and zero means symmetric. For example, an asymmetry value of +0.2 would mean the left voxel has ~20% higher CBF than the right voxel, while –0.5 would mean the right side has 50% higher perfusion than the left in that region.
 
 Log ratio: Another metric is the log-transformed ratio $\log(L/R)$, which symmetrizes the distribution and handles scaling (log ratio 0 means symmetry, positive = left > right). This could be computed as $\log((L+\epsilon)/(R+\epsilon))$ for numerical stability. It yields similar information but could be beneficial if perfusion values have a skewed distribution.
+
+
+-------
+# MNI Standard Space
+We should warp the asymmetry map to MNI space so that all subjects’ asymmetry maps are in a common reference. Since the structural image already has a known transform to MNI (from the FreeSurfer or ANTs registration used in the HCP pipelines), we can apply that same warp to the asymmetry volume. In practice, this could be done by adding an applywarp (FSL) call or using wb_command -volume-warpfield with the warp that was applied to the perfusion images. The pipeline’s design likely has a warp or premade MNI version of the perfusion from FSL’s oxford_asl (the directory listing shows a std_space output for perfusion).
+?? what does FSL and freesurfer do sequentially in this pipeline?
+
+For consistency, we can mirror that: once the asymmetry NIfTI is in T1 space, apply the structural-to-MNI warp to get perfusion_asym_index_MNI.nii.gz in the MNINonLinear/ASL folder. This allows group-level analyses or comparison of asymmetry maps across subjects in standard space. (Note: The asymmetry computation itself should not be done in MNI directly because resampling perfusion to MNI then flipping could introduce interpolation differences between left/right. It’s more accurate to compute asymmetry in native space and then warp the result, which preserves the L–R difference signal.)
+
+-----
+# Files considerations
+?? The pipeline uses the FSL `oxford_asl` tool internally, called from run_pipeline.py to calculate voxelwise perfusion.
+(is it true?) The voxelwise perfusion output is usually saved as perfusion_calib.nii.gz.
+
+Atlas Template Registration:
+The pipeline includes atlas templates (e.g., Mutsaerts' vascular territories atlas) for ROI analysis.
+Around Stage 10, where oxford_asl_roi_stats.py is invoked.
+
+?? We need to ensure oxford_asl voxelwise perfusion calculation is present `run_pipeline.py`. Ensure the atlas template registration (to anatomical or standard MNI space) is already implemented. If missing, you may need to perform registration. Confirm spatial normalization (e.g., flirt, fnirt, or ANTs) to standard MNI or other template spaces. Ensure atlas alignment within the existing pipeline.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
