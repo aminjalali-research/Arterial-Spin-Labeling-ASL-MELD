@@ -95,25 +95,68 @@ se_based.py: Script handling SE-based bias estimation.
 SubcorticalProcessingASL.sh: Prepares subcortical metrics for CIFTI generation.
 SurfaceSmoothASL.sh: Applies surface smoothing to perfusion data.
 VolumetoSurfaceASL.sh: Maps volumetric perfusion data to cortical surfaces.
+asl_correction.py, asl_differencing.py, fully_corrected.py: ASL preprocessing and perfusion calculation.
+qc.py: Atlas registration and ROI statistics are handled in this script. 
+registration.py: Performs ASL-to-structural image registration using FreeSurfer.
+tissue_masks.py: Generates tissue-specific masks (GM, WM, CSF).
+utils.py: Contains utility functions for file handling, JSON management, image binarization, and registration.
+setup.py: Handles package setup and dependency management.
+estimate_banding.py and prepare_estimation.py: Manage empirical banding correction steps.
 
 
 ? Shall we?
 To run voxel-based asymmetry analysis:
-1. Insert the asymmetry calculation function (provided earlier) into run_pipeline.py after stage 10 (ROI statistics).
-2. Ensure outputs:
+1. Insert the asymmetry calculation function (compute_asymmetry_map(perf, mask, asym_output)) into run_pipeline.py after stage 10 (ROI statistics).
+2. Handle MNI Transform: Use results_to_mni.py to warp the asymmetry map alongside perfusion mappings.
+3. Ensure outputs:
 Asymmetry index (perfusion_asym_index.nii.gz) saved in the T1w space.
 Transform this asymmetry index to MNI space (results_to_mni.py can be utilized similarly as done for perfusion).
 Project the asymmetry map onto cortical surfaces using VolumetoSurfaceASL.sh and include it in your pipeline outputs.
+4. Update Output Registries: Add new files to key_outputs.py and QC scripts.
+5. Integrate the previously provided voxel-based asymmetry calculation function into run_pipeline.py following Stage 10.
+Modify results_to_mni.py and VolumetoSurfaceASL.sh scripts to ensure voxel-based asymmetry maps are correctly transformed and projected.
+6. Update QC scripts (qc.py) to visualize new voxel-based asymmetry maps for comprehensive quality assurance.
+
+------------------------
+
+# Pipeline Overview
+While ROI stats provide region-wide averages, voxelwise asymmetry highlights localized anomalies — crucial for focal pathology detection 
+
+a. Preprocessing & Perfusion Quantification
+- Controls and labeled ASL volumes are motion-corrected and averaged.
+- Perfusion maps (CBF and arterial transit time [ATT]) are estimated voxelwise using FSL’s oxford_asl tool, producing calibrated perfusion volumes in native T1w space (e.g., perfusion_calib.nii.gz) and in MNI space for comparability.
 
 
+b. Tissue Segmentation & Masking
+- Structural volumes are segmented into gray matter (GM), white matter (WM), and CSF via tissue_masks.py.
+- These tissue segments are coregistered to the perfusion maps.
+- Brain masks are generated to confine analysis to brain voxels only.
+
+c. ROI-Based Statistical Analysis (Stage 10)
+- Uses oxford_asl_roi_stats.py to compute mean perfusion and ATT within predefined ROIs (cortical GM/WM segments, vascular territories, or standard atlas labels) on a voxelwise basis.
+- Produces ROI CSVs (e.g., roi_stats.csv) containing left/right values when bilateral ROIs are used.
+
+d. Surface Projection & Standardization
+- The volumetric perfusion maps are projected onto cortical surfaces (via VolumetoSurfaceASL.sh) and resampled to standard mesh like fsLR in CIFTI format.
+- Transformation to MNI space occurs using results_to_mni.py.
 
 
+e. QC & Downstream Outputs
+Scripts like qc.py and CreateDenseScalarASL.sh generate visualizations for quality assurance and aggregate surface/perfusion outputs in both individual (T1w) and standard (MNI, CIFTI) spaces.
 
+---------------------------
 
+MNI (Montreal Neurological Institute) standard space is a template derived from averaging many healthy adult brain scans. It acts as a common coordinate system for neuroimaging analysis. 
 
-
-
-
+Why register to MNI?
+- Group Comparability: Aligning each subject’s perfusion data to MNI space ensures voxel‑to‑voxel correspondence across individuals, enabling robust group‑level statistical analysis.
+- Atlas-Based Parcellation: Regions defined in standard atlases are aligned to MNI. Registering allows extracting consistent ROI statistics across subjects.
+- After registering ASL perfusion to MNI space, oxford_asl_roi_stats.py overlays these atlases to compute ROI‑based perfusion statistics. Atlas labels ensure comparisons are anatomically meaningful and consistent across subjects.
+  
+Common Atlases:
+- AAL (Automated Anatomical Labeling) – ~90 cortical/subcortical labels in MNI space.
+- Harvard–Oxford Atlas – popular probabilistic cortical and subcortical atlas within FSL.
+- Vascular territory atlas – used in your pipeline stage 10 (Mutsaerts atlas).
 
 
 
