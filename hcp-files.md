@@ -104,7 +104,7 @@ setup.py: Handles package setup and dependency management.
 estimate_banding.py and prepare_estimation.py: Manage empirical banding correction steps.
 
 
-? Shall we?
+
 To run voxel-based asymmetry analysis:
 1. Insert the asymmetry calculation function (compute_asymmetry_map(perf, mask, asym_output)) into run_pipeline.py after stage 10 (ROI statistics).
 2. Handle MNI Transform: Use results_to_mni.py to warp the asymmetry map alongside perfusion mappings.
@@ -145,19 +145,24 @@ e. QC & Downstream Outputs
 Scripts like qc.py and CreateDenseScalarASL.sh generate visualizations for quality assurance and aggregate surface/perfusion outputs in both individual (T1w) and standard (MNI, CIFTI) spaces.
 
 ---------------------------
-
+# Why register to MNI?
 MNI (Montreal Neurological Institute) standard space is a template derived from averaging many healthy adult brain scans. It acts as a common coordinate system for neuroimaging analysis. 
 
-Why register to MNI?
 - Group Comparability: Aligning each subject’s perfusion data to MNI space ensures voxel‑to‑voxel correspondence across individuals, enabling robust group‑level statistical analysis.
 - Atlas-Based Parcellation: Regions defined in standard atlases are aligned to MNI. Registering allows extracting consistent ROI statistics across subjects.
 - After registering ASL perfusion to MNI space, oxford_asl_roi_stats.py overlays these atlases to compute ROI‑based perfusion statistics. Atlas labels ensure comparisons are anatomically meaningful and consistent across subjects.
   
-Common Atlases:
+# Common Atlases:
 - AAL (Automated Anatomical Labeling) – ~90 cortical/subcortical labels in MNI space.
 - Harvard–Oxford Atlas – popular probabilistic cortical and subcortical atlas within FSL.
 - Vascular territory atlas – used in your pipeline stage 10 (Mutsaerts atlas).
 
+--------
+# How Registrations Work in the Pipeline
+Two-stage registration is typically used:
+
+- T1w-to-MNI registration: High-resolution structural scans (T1) are aligned to the MNI template. Use of nonlinear warps improves anatomical alignment across individuals.
+- ASL-to-T1w registration: Perfusion maps (in native ASL/T1w space) are then warped to MNI via the T1→MNI transformation. This approach ensures better anatomical accuracy than direct ASL-to-MNI alignment. 
 
 
 
