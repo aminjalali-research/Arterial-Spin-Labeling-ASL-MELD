@@ -86,7 +86,24 @@ Around Stage 10, where oxford_asl_roi_stats.py is invoked.
 ?? We need to ensure oxford_asl voxelwise perfusion calculation is present `run_pipeline.py`. Ensure the atlas template registration (to anatomical or standard MNI space) is already implemented. If missing, you may need to perform registration. Confirm spatial normalization (e.g., flirt, fnirt, or ANTs) to standard MNI or other template spaces. Ensure atlas alignment within the existing pipeline.
 
 
+CreateDenseScalarASL.sh: Creates dense scalar files for cortical surface analysis.
+mt_estimation_pipeline.py: Estimates empirical banding scaling factors.
+PerfusionCIFTIProcessingPipelineASL.sh: Projects voxelwise perfusion results onto the cortical surface and MNI space.
+results_to_mni.py: Transforms ASL-gridded T1w-space ASL variables into ASL-gridded MNI-space.
+run_pipeline.py: Main script orchestrating pipeline stages from preprocessing to ROI statistics.
+se_based.py: Script handling SE-based bias estimation.
+SubcorticalProcessingASL.sh: Prepares subcortical metrics for CIFTI generation.
+SurfaceSmoothASL.sh: Applies surface smoothing to perfusion data.
+VolumetoSurfaceASL.sh: Maps volumetric perfusion data to cortical surfaces.
 
+
+? Shall we?
+To run voxel-based asymmetry analysis:
+1. Insert the asymmetry calculation function (provided earlier) into run_pipeline.py after stage 10 (ROI statistics).
+2. Ensure outputs:
+Asymmetry index (perfusion_asym_index.nii.gz) saved in the T1w space.
+Transform this asymmetry index to MNI space (results_to_mni.py can be utilized similarly as done for perfusion).
+Project the asymmetry map onto cortical surfaces using VolumetoSurfaceASL.sh and include it in your pipeline outputs.
 
 
 
