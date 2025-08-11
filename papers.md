@@ -1,6 +1,6 @@
 # Paper A. Arterial spin labelling perfusion MRI analysis for the Human Connectome Project Lifespan Ageing and Development studies.
 
-## 1. CIFTI Format and Grayordinates
+### 1. CIFTI Format and Grayordinates
 What it is: A unified coordinate system combining cortical surface vertices and subcortical volume voxels into "grayordinates."
 
 Why we do this: for space efficiency! Reduces storage by 84% compared to storing full brain volumes.
