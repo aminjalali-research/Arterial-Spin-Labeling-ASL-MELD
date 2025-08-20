@@ -61,5 +61,59 @@ BRAIN ASYMMETRY ANALYSIS REPORT
 <img width="2101" height="755" alt="image" src="https://github.com/user-attachments/assets/b2da9822-f22f-4f4e-b784-0b7eecdeb434" />
 
 
+# API 
+Key API Components for Your Use Case
+1. Main Entry Point - IArcApi Interface
+```csharp
+csharp$api = New-Object -comobject Arc.Api.ArcApi
+$api.Login("username", "password")  // or Login() for Windows AD
+```
+2. Getting and Processing Records
+```csharp
+// Get all records
+$records = $api.GetRecords()
+
+// Or get records by date range
+$records = $api.GetRecords($startDate, $endDate)
+```
+3. Critical Patient Data Fields to Anonymize
+The API provides access to patient fields through IPatient.DefaultFieldDefinitionKeys:
+
+Patient Fields to Clear/Modify:
+FirstName, LastName, MiddleName, PatientId, Birthdate, Photo, OtherId.
+
+Record Fields to Clear/Modify:
+Physician, ReferringPhysician, Comments, History, Procedures
+
+4. Anonymization Process
+```csharp
+foreach ($record in $records) {
+    $record.Open()
+    
+    // Access patient fields
+    $patient = $record.Patient
+    $patientFields = $patient.Fields
+    
+    // Clear identifying information
+    $firstNameKey = $patient.DefaultFieldDefinitionKeys.FirstName
+    $lastNameKey = $patient.DefaultFieldDefinitionKeys.LastName
+    $patientIdKey = $patient.DefaultFieldDefinitionKeys.PatientId
+    $birthdateKey = $patient.DefaultFieldDefinitionKeys.Birthdate
+    
+    // Set anonymous values
+    $patientFields.GetField($firstNameKey).SetValue("Anonymous")
+    $patientFields.GetField($lastNameKey).SetValue("Patient")
+    $patientFields.GetField($patientIdKey).SetValue("ANON_" + [Guid]::NewGuid().ToString().Substring(0,8))
+    
+    // Save changes
+    $patientFields.SaveData()
+    
+    // Also clear record-level identifying info
+    $recordFields = $record.Fields
+    $physicianKey = $record.DefaultFieldDefinitionKeys.Physician
+    $recordFields.GetField($physicianKey).SetValue("")
+    $recordFields.SaveData()
+}
+```
 
 
