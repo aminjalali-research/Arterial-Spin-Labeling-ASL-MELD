@@ -58,6 +58,8 @@ BRAIN ASYMMETRY ANALYSIS REPORT
 <img width="1454" height="1431" alt="image" src="https://github.com/user-attachments/assets/dd2e6585-ac06-4bbc-8625-be0c8c400f4f" />
 <img width="1001" height="968" alt="image" src="https://github.com/user-attachments/assets/dd5a154e-25a8-4b7e-942c-40901465b9b6" />
 <img width="1001" height="968" alt="image" src="https://github.com/user-attachments/assets/780ca66c-ad91-46e8-9bc4-54c0bf4f29b8" />
+<img width="2101" height="755" alt="image" src="https://github.com/user-attachments/assets/b2da9822-f22f-4f4e-b784-0b7eecdeb434" />
+
 
 
 
