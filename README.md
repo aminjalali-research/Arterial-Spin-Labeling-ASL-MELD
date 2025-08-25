@@ -1,6 +1,11 @@
 # Questions Here
 
-
+- Predicting Regional Cerebral Blood Flow Using Voxel-Wise Resting-State Functional MRI
+- Voxel-wise or Region-wise Nuisance Regression for Functional Connectivity Analyses: Does it matter?
+- Advantages and challenges of using arterial spin labelling MRI to monitor cerebral blood flow in multi-centre clinical trials of neurodegenerative disease: Experience from the RADAR study
+- Insights into hippocampal perfusion using high-resolution, multi-modal 7T MRI
+- https://github.com/ANTsX/ANTsPyMM
+- Non-Invasive Perfusion MR Imaging of the Human Brain via Breath-Holding
 -----
 
 # HCP-ASL Processing Pipeline
