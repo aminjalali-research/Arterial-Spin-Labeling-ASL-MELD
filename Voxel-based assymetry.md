@@ -1,3 +1,27 @@
+## 📚 Paper Index
+
+| No. | Title | Notes |
+|-----|-------|-------|
+| 1 | [ASL Perfusion MRI for HCP Lifespan](https://pmc.ncbi.nlm.nih.gov/articles/PMC11905292/) [[Code]](https://github.com/physimals/hcp-asl?tab=readme-ov-file) | [📝 Notes](papers/01_hcp_asl_analysis.md) |
+| 2 | [Minimal Preprocessing Pipelines for HCP](https://pmc.ncbi.nlm.nih.gov/articles/PMC3720813/) | [📝 Notes](papers/02_hcp_minimal_preprocessing.md) |
+| 3 | [Cerebral Blood Perfusion Across Lifespan](https://www.biorxiv.org/content/biorxiv/early/2025/02/06/2025.02.05.636674.full.pdf) | [📝 Notes](papers/03_cerebral_blood_perf_lifespan.md) |
+| 4 | [ASLPrep Pipeline](https://github.com/PennLINC/aslprep?tab=readme-ov-file) | [📝 Notes](papers/04_aslprep_pipeline.md) |
+| 5 | [Beginner's Guide to ASL](https://pmc.ncbi.nlm.nih.gov/articles/PMC10365107/) | [📝 Notes](papers/05_asl_beginners_guide.md) |
+| 6 | [ASLPrep for Quantification](https://pmc.ncbi.nlm.nih.gov/articles/PMC10548890/pdf/nihms-1827527.pdf) | [📝 Notes](papers/06_aslprep_quantification.md) |
+| 7 | [ExploreASL](https://www.sciencedirect.com/science/article/pii/S1053811920305176) | [📝 Notes](papers/07_exploreasl_pipeline.md) |
+| 8 | [Deep Segmentation Guide](https://arxiv.org/pdf/2304.05901) | [📝 Notes](papers/08_deep_segmentation_beginners.md) |
+| 9 | [TorchIO Library](https://github.com/TorchIO-project/torchio/tree/main) | [📝 Notes](papers/09_torchio_library.md) |
+|10 | [Mamba-UNet](https://arxiv.org/pdf/2402.05079v2) | [📝 Notes](papers/10_mamba_unet.md) |
+|11 | [SWANE Workflow for Epilepsy](https://github.com/LICE-dev/swane/wiki) | [📝 Notes](papers/11_swane_workflow_epilepsy.md) |
+|12 | [BrainMVP Multimodal Pretraining](https://github.com/shaohao011/BrainMVP) | [📝 Notes](papers/12_brainmvp_multimodal.md) |
+|13 | VoxelPrompt (Link TBD) | [📝 Notes](papers/13_voxelprompt_vision_language.md) |
+|14 | Symmetry Awareness Encoded Deep Learning Framework for Brain Imaging Analysis | Partially read |
+
+Machine learning based seizure classification and digital biosignal analysis of ECT seizures  https://github.com/maxkayser/ectmetrics/
+
+
+
+
 # Left–Right Lobe Asymmetry Analysis in ASL Perfusion MRI
 
 Overview: Brain perfusion asymmetry (left vs. right hemisphere or lobes) can be assessed at different scales. Below we compare voxel-based, ROI-based, and surface-based methods for analyzing asymmetry in arterial spin labeling (ASL) perfusion MRI. For each, we explain how asymmetries are quantified, provide any relevant formula with asymmetry indices (AI) with attention to sensitivity, spatial resolution, and robustness. 
