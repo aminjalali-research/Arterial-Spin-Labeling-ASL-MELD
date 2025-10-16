@@ -565,4 +565,53 @@ The pipeline integrates with standard HCP processing:
 3. **Output Format**: Produces HCP-compatible CIFTI outputs
 4. **Directory Structure**: Follows HCP conventions
 
-This comprehensive guide should help you successfully process ASL data with the HCP pipeline. For additional support, consult the pipeline documentation and FSL resources.
+-----
+
+# Tasks
+We want to perform the voxel-based asymmetry in this project. Investigate the use of a symmetrical template in processing Voxel-Based Asymmetry Analysis, laterality measures, or hemisphere comparisons.
+
+Template Usage and ROI Analysis:
+MNI Standard Space: The pipeline transforms data to MNI space (MNINonLinear processing in stage 10-12)
+T1w Native Space: Primary processing occurs in subject's native T1w space (ASLT1w)
+Surface Templates: Uses HCP surface meshes with MSMAll registration by default
+
+Template Symmetry Assessment: 
+Vascular Territories Atlas Has separate left (LICA) and right (RICA) carotid territories. This suggests anatomical asymmetry is preserved
+Not symmetrical - maintains left/right distinctions.
+
+MNI Template:
+Standard MNI152 space used for final outputs
+While MNI templates can be symmetrical, the pipeline doesn't specify use of a symmetrical version
+Likely asymmetrical standard MNI space
+
+Surface Processing:
+Uses HCP's MSMAll registration which preserves individual cortical folding patterns
+Not symmetrical - maintains subject-specific anatomy
+ROI Statistics Capability
+
+The pipeline does perform ROI-based analysis in Stage 10:
+Extracts summary statistics within the vascular territories
+Uses the 3-region vascular atlas (LICA/RICA/VBA)
+Operates in both native and MNI spaces
+But this is limited to mean perfusion values, not asymmetry analysis
+
+Recommendations for Asymmetry Analysis
+Add custom voxel-based asymmetry functions to calculate left-right perfusion differences
+Use a symmetrical template for proper hemisphere alignment. Implement laterality indices.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
