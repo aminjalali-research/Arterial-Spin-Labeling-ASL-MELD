@@ -76,37 +76,15 @@ Subcortical-Only (3 atlases):
 Location: atlas.py lines 4-46 defines the complete atlas framework
 ```
 
-Symmetrical Template Analysis
-ASLPrep uses sophisticated multi-template approach:
+# Symmetrical Template Analysis
+ASLPrep template Spaces:
 
-Template Spaces:
-Primary: MNI152NLin2009cAsym (asymmetric template)
-Atlas space: MNI152NLin6Asym (also asymmetric)
+- Primary: MNI152NLin2009cAsym (asymmetric template)
+- Atlas space: MNI152NLin6Asym (also asymmetric)
 Processing: Complex warping chain: MNI152NLin6Asym → MNI152NLin2009cAsym → T1w → ASL
-Asymmetry Analysis Implications:
 Templates are NOT symmetrical (both use "Asym" designation)
-However, ASLPrep provides hemisphere-specific processing with hemi-L and hemi-R outputs
-Voxel-based asymmetry analysis would require:
-Symmetrical template (not currently used)
-Or hemisphere flipping/registration approach
-Custom asymmetry index calculation
-Key Code Locations:
-Template handling: cbf.py lines 685-713
-Hemisphere processing: Multiple files showing hemi-L_desc-cortex_mask outputs
-Warping chains: confounds.py lines 627-670
-Comparison: HCP ASL vs ASLPrep
-Feature	HCP ASL	ASLPrep
-Atlases	3 vascular territories	17 comprehensive atlases
-Templates	Standard MNI152	Multi-template (MNI152NLin6Asym/2009cAsym)
-Symmetrical	No explicit symmetry	No (both templates asymmetric)
-Output Structure	Separate T1w/MNI maps	Extensive parcellated outputs
-Asymmetry Ready	No	Partial (hemisphere-specific outputs)
+Solution: However, ASLPrep provides hemisphere-specific processing with hemi-L and hemi-R outputs
 
-
-
-https://github.com/physimals/hcp-asl
-https://github.com/PennLINC/aslprep
-https://github.com/MICA-MNI/micapipe
 
 
 
