@@ -85,6 +85,8 @@ Processing: Complex warping chain: MNI152NLin6Asym → MNI152NLin2009cAsym → T
 Templates are NOT symmetrical (both use "Asym" designation)
 Solution: However, ASLPrep provides hemisphere-specific processing with hemi-L and hemi-R outputs
 
+---
+
 
 
 
